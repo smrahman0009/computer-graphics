@@ -1,0 +1,113 @@
+#include<iostream>
+using namespace std;
+#include <cstdio>
+#include<GL/gl.h>
+#include <GL/glut.h>
+#include<windows.h>
+#include<mmsystem.h>
+
+
+
+///////////////// SET THE WINDOW SIZE //////////////////////////////
+int winWidth = 900;
+int winHeight = 600;
+
+///////////////// Field (Lower part) properties /////////////////
+
+int fieldHeight = winHeight / 3 - 20;
+int fieldWidth = winWidth;
+
+//////////////////// SKY (UPPER Half) properties ///////////////
+int skyHeight = winHeight;
+int skyWidth = winWidth;
+
+///////////////////////// ROAD //////////////////////
+int roadMinX = 0;
+int roadMinY = 30;
+int roadMaxX = winWidth;
+int roadMaxY = fieldHeight - roadMinY;
+
+
+/////////////// Color property/////////////////
+///////////////// field color////////////////
+
+void skyColor(void){
+ glColor3ub (66, 244, 244);
+}
+
+void fieldColor(void){
+ glColor3ub (66, 244, 75);
+}
+
+void roadColor(){
+    glColor3ub (105, 105, 105);
+}
+void myField(void){
+    fieldColor();
+    glPointSize(5.0);
+    glBegin(GL_QUADS);
+    glVertex2i(0, 0);
+    glVertex2i(fieldWidth, 0);
+    glVertex2i(fieldWidth, fieldHeight);
+    glVertex2i(0, fieldHeight);
+    glEnd();
+}
+
+void mySky(void){
+    skyColor();
+    glPointSize(5.0);
+    glBegin(GL_QUADS);
+    glVertex2i(0, fieldHeight);
+    glVertex2i(skyWidth, fieldHeight);
+    glVertex2i(skyWidth, skyHeight);
+    glVertex2i(0, skyHeight);
+    glEnd();
+}
+
+void myRoad(void){
+    roadColor();
+    glPointSize(5.0);
+    glBegin(GL_QUADS);
+    glVertex2i(roadMinX, roadMinY);
+    glVertex2i(roadMaxX, roadMinY);
+    glVertex2i(roadMaxX, roadMaxY);
+    glVertex2i(roadMinX, roadMaxY);
+    glEnd();
+}
+
+void myDisplay(void)
+{
+glClear (GL_COLOR_BUFFER_BIT);
+
+
+myField();
+mySky();
+myRoad();
+glFlush ();
+}
+
+void myInit (void)
+{
+glClearColor(0.0, 0.0, 0.0, 0.0);
+glPointSize(4.0);
+glMatrixMode(GL_PROJECTION);
+glLoadIdentity();
+gluOrtho2D(0.0, 640.0, 0.0, 480.0);
+}
+
+
+
+
+
+int main(int argc, char** argv)
+{
+glutInit(&argc, argv);
+glutInitDisplayMode (GLUT_SINGLE | GLUT_RGB);
+glutInitWindowSize (winWidth, winHeight);
+glutInitWindowPosition (100, 150);
+glutCreateWindow ("");
+glutDisplayFunc(myDisplay);
+myInit ();
+sndPlaySound(TEXT("C:\\Users\\Musfiq\\OneDrive\\CG\\main\\test\\test.wav"),SND_SYNC);
+glutMainLoop();
+}
